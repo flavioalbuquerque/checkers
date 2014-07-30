@@ -1,4 +1,19 @@
+var rowLength = 8;
+
 function init() {
+    newGame();
+
+    $('#newGame').click(function() {
+        newGame();
+    });
+}
+
+///////////////////////////////////////////////////
+// Init and setup: Begin
+///////////////////////////////////////////////////
+function newGame() {
+    resetGame();
+
     buildBoard();
     setUpBoard();
 
@@ -16,9 +31,11 @@ function init() {
     });
 }
 
-///////////////////////////////////////////////////
-// Init and setup: Begin
-///////////////////////////////////////////////////
+function resetGame() {
+    $('#board').empty();
+    $('#pieces').empty();
+    $('span#moveCount').html(0);
+}
 function buildBoard() {
     var $board = $('#board');
     var squareCount = 64;
@@ -51,8 +68,8 @@ function setUpBoard() {
 // 0 and 63 (inclusive) and returns 1 if the square should be
 // dark, and 0 if the square should be light
 function lightOrDark(index) {
-    var x = index % 8;
-    var y = Math.floor(index / 8);
+    var x = index % rowLength;
+    var y = Math.floor(index / rowLength);
     var oddX = x % 2;
     var oddY = y % 2;
     return (oddX ^ oddY);
@@ -110,8 +127,8 @@ function squareClick($square) {
 
     // square index to pixel position
     var index = $square.prevAll().length;
-    var x = index % 8;
-    var y = Math.floor(index / 8);
+    var x = index % rowLength;
+    var y = Math.floor(index / rowLength);
     var pixels = getPixels(x,y);
 
     movePieceTo($selectedPiece, pixels.top,pixels.left);
@@ -213,7 +230,7 @@ function getMovableSquares($piece) {
         //this function translates a piece
         var position = $(piece).position();
         var coords = getCoords(position.top,position.left);
-        var squareIndex = coords.y * 8 + coords.x;
+        var squareIndex = coords.y * rowLength + coords.x;
         takenSquares[squareIndex] = $(piece);
     });
 
@@ -245,7 +262,7 @@ function getMovableSquares($piece) {
     }
 
     var outOfBounds = function(coords) {
-        return !(coords.x >= 0 && coords.x < 8 && coords.y >= 0 && coords.y < 8);
+        return !(coords.x >= 0 && coords.x < rowLength && coords.y >= 0 && coords.y < rowLength);
     };
 
     var $legalSquares = $();
@@ -255,7 +272,7 @@ function getMovableSquares($piece) {
         if (outOfBounds(coords)) return;
 
         //our current square is at coords
-        var $currentSquare = $squares.eq(coords.y*8 + coords.x);
+        var $currentSquare = $squares.eq(coords.y*rowLength + coords.x);
 
         $.each(vectors,function(index,vector) {
 
@@ -269,7 +286,7 @@ function getMovableSquares($piece) {
             if (outOfBounds(newCoords)) return;
 
 
-            var newSquareIndex = 8*newCoords.y + newCoords.x;
+            var newSquareIndex = rowLength*newCoords.y + newCoords.x;
             //if the square is taken,
             if (takenSquares[newSquareIndex]) {
                 //it gets interesting
@@ -288,7 +305,7 @@ function getMovableSquares($piece) {
                 };
                 if (outOfBounds(jumpCoords)) return;
 
-                var jumpSquareIndex = jumpCoords.y*8 + jumpCoords.x;
+                var jumpSquareIndex = jumpCoords.y*rowLength + jumpCoords.x;
                 var $newSquare;
                 //if the jump square is free...
                 //add it and the data-jumped-pieces
