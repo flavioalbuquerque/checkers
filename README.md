@@ -1,2 +1,3 @@
 checkers
 ========
+Checkers game.
