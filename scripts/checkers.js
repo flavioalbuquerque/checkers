@@ -37,7 +37,12 @@ function resetGame() {
     $('#board').empty();
     $('#pieces').empty();
     $('span#moveCount').html(0);
+
+    var $winnerMessage = $('#winnerMessage');
+    $winnerMessage.hide();
+    $winnerMessage.html("");
 }
+
 function buildBoard() {
     var $board = $('#board');
     var squareCount = 64;
@@ -50,21 +55,24 @@ function buildBoard() {
 function countPieces() {
     var lightCount = $('div.piece.light').length;
     var darkCount = $('div.piece.dark').length;
-    var $winnerMessage = $('#winnerMessage');
+
 
     $('#lightCount').html(lightCount);
     $('#darkCount').html(darkCount);
 
     // check if we have a winner
-    if(lightCount == 0 || darkCount == 0) {
-        var $winner = lightCount == 0 ? $('#darkName') : $('#lightName');
+    var $winner;
+    if(lightCount == 0)
+        $winner = $('#darkName');
+    else if(darkCount == 0)
+        $winner = $('#lightName');
+
+    if($winner != null) {
+        var $winnerMessage = $('#winnerMessage');
         $winnerMessage.html($winner.text() + " wins!");
         $winnerMessage.show(500);
     }
-    else {
-        $winnerMessage.hide(500);
-        $winnerMessage.html("");
-    }
+
 }
 
 function addPieces() {
