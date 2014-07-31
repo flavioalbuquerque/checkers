@@ -21,6 +21,8 @@ function newGame() {
     setUpPieces();
     seInitialPosition();
 
+    countPieces();
+
     // events
     $('div.piece').click(function() {
         pieceClick($(this));
@@ -42,6 +44,26 @@ function buildBoard() {
     for(var i=0; i<squareCount; i++){
         var $squareDiv = $("<div class='square'></div>");
         $board.append($squareDiv);
+    }
+}
+
+function countPieces() {
+    var lightCount = $('div.piece.light').length;
+    var darkCount = $('div.piece.dark').length;
+    var $winnerMessage = $('#winnerMessage');
+
+    $('#lightCount').html(lightCount);
+    $('#darkCount').html(darkCount);
+
+    // check if we have a winner
+    if(lightCount == 0 || darkCount == 0) {
+        var $winner = lightCount == 0 ? $('#darkName') : $('#lightName');
+        $winnerMessage.html($winner.text() + " wins!");
+        $winnerMessage.show(500);
+    }
+    else {
+        $winnerMessage.hide(500);
+        $winnerMessage.html("");
     }
 }
 
@@ -169,6 +191,7 @@ function resetMovables() {
 // it should remove every element in that jQuery selection
 function handleCapturedPieces($square) {
     $square.data('jumpedPieces').remove();
+    countPieces();
 }
 
 function checkKing($piece,squareIndex) {

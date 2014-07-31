@@ -29,6 +29,13 @@ div.square.movable:hover {
     cursor:pointer;
 }
 
+div.square.dark.movable {
+    background-color: rgb(32, 154, 228);
+}
+
+div.square.light.movable {
+    background-color: blue;
+}
 /* the bottom row */
 div.square:nth-last-child(-n + 8) {
     border-bottom-style:none;
@@ -93,7 +100,7 @@ div.piece.dark {
 }
 
 div.piece.king {
-    background-image:url('imgs/king.png');
+    background-image:url('../imgs/king.png');
     background-repeat:no-repeat;
     background-position:center;
 }
